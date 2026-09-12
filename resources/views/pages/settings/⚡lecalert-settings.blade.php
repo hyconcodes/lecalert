@@ -44,12 +44,8 @@ new class extends Component
 ?>
 
 <div class="flex h-full w-full flex-1 flex-col gap-6 p-4 lg:p-6">
-        <div>
-            <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Settings</h1>
-            <p class="text-sm text-zinc-500 dark:text-zinc-400">Configure your reminder preferences and notification settings</p>
-        </div>
-
-        <form wire:submit="save" class="max-w-2xl space-y-6">
+    <x-pages::settings.layout :heading="__('Reminder Settings')" :subheading="__('Configure your reminder preferences and notification settings')">
+        <form wire:submit="save" class="space-y-6">
             {{-- Reminder Settings --}}
             <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
                 <h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-white">Reminder Settings</h2>
@@ -131,5 +127,5 @@ new class extends Component
                 </flux:button>
             </div>
         </form>
-    </div>
+    </x-pages::settings.layout>
 </div>

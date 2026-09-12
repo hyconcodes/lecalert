@@ -155,8 +155,19 @@ new class extends Component
             <div class="grid gap-4">
                 @foreach($lectures as $lectureData)
                     @php
-                        $lecture = \App\Models\Lecture::find($lectureData['id']);
-                        $status = $lecture?->status ?? 'upcoming';
+                        $lectureDate = \Carbon\Carbon::parse($lectureData['lecture_date']);
+                        $startTime = \Carbon\Carbon::parse($lectureData['start_time']);
+                        $endTime = !empty($lectureData['end_time']) ? \Carbon\Carbon::parse($lectureData['end_time']) : null;
+                        $now = now();
+                        if ($endTime && $now->greaterThan($lectureDate->copy()->setTime($endTime->hour, $endTime->minute))) {
+                            $status = 'completed';
+                        } elseif ($lectureDate->isToday()) {
+                            $status = $now->greaterThanOrEqualTo($lectureDate->copy()->setTime($startTime->hour, $startTime->minute)) ? 'ongoing' : 'today';
+                        } elseif ($lectureDate->isPast()) {
+                            $status = 'completed';
+                        } else {
+                            $status = 'upcoming';
+                        }
                     @endphp
                     <div class="group relative rounded-xl border border-zinc-200 bg-white p-5 transition-all hover:shadow-md dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600">
                         <div class="flex items-start justify-between">

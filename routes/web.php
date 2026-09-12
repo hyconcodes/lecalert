@@ -18,10 +18,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('/notifications', 'pages::notifications.index')->name('notifications.index');
 
     // Custom Settings (LecAlert-specific)
-    Route::get('/lecalert-settings', fn () => view('pages.settings.index'))->name('lecalert.settings');
-    Route::put('/lecalert-settings', function () {
-        return back()->with('success', 'Settings updated successfully.');
-    })->name('lecalert.settings.update');
+    Route::livewire('/lecalert-settings', 'pages::settings.lecalert-settings')->name('lecalert.settings');
 
     // Notification Emails
     Route::livewire('/settings/notification-emails', 'pages::settings.notification-emails')->name('notification-emails');

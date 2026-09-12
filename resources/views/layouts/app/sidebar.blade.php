@@ -28,10 +28,7 @@
                 <flux:sidebar.group :heading="__('Account')" class="grid">
                     <flux:sidebar.item icon="bell" :href="route('notifications.index')" :current="request()->routeIs('notifications.*')" wire:navigate>
                         {{ __('Notifications') }}
-                        @php $unreadCount = auth()->user()->unread_notifications_count; @endphp
-                        @if($unreadCount > 0)
-                            <flux:badge color="red" size="sm">{{ $unreadCount }}</flux:badge>
-                        @endif
+                        <livewire:notification-count />
                     </flux:sidebar.item>
                     <flux:sidebar.item icon="cog" :href="route('settings.edit')" :current="request()->routeIs('settings.*')" wire:navigate>
                         {{ __('Settings') }}
@@ -71,12 +68,7 @@
             <!-- Mobile Notification Bell -->
             <a href="{{ route('notifications.index') }}" class="relative p-2 text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200">
                 <flux:icon.bell class="size-5" />
-                @php $unreadCount = auth()->user()->unread_notifications_count; @endphp
-                @if($unreadCount > 0)
-                    <span class="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] font-medium text-white">
-                        {{ $unreadCount > 9 ? '9+' : $unreadCount }}
-                    </span>
-                @endif
+                @livewire('notification-count')
             </a>
 
             <flux:dropdown position="top" align="end">

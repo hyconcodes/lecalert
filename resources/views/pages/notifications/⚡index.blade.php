@@ -36,18 +36,21 @@ new class extends Component
     {
         auth()->user()->notifications()->where('id', $notificationId)->update(['is_read' => true]);
         $this->loadNotifications();
+        $this->dispatch('notificationUpdated');
     }
 
     public function markAllAsRead(): void
     {
         auth()->user()->notifications()->where('is_read', false)->update(['is_read' => true]);
         $this->loadNotifications();
+        $this->dispatch('notificationUpdated');
     }
 
     public function deleteNotification(int $notificationId): void
     {
         auth()->user()->notifications()->where('id', $notificationId)->delete();
         $this->loadNotifications();
+        $this->dispatch('notificationUpdated');
     }
 
 };
@@ -123,4 +126,3 @@ new class extends Component
             />
         @endif
     </div>
-</div>

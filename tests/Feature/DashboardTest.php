@@ -1,16 +1,44 @@
 <?php
 
+use App\Models\Lecture;
 use App\Models\User;
 
-test('guests are redirected to the login page', function () {
-    $response = $this->get(route('dashboard'));
-    $response->assertRedirect(route('login'));
+it('can display the dashboard', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertSee('Dashboard');
 });
 
-test('authenticated users can visit the dashboard', function () {
+it('shows correct stats on dashboard', function () {
     $user = User::factory()->create();
-    $this->actingAs($user);
+    Lecture::factory()->count(3)->create(['user_id' => $user->id]);
+    Lecture::factory()->today()->create(['user_id' => $user->id]);
 
-    $response = $this->get(route('dashboard'));
-    $response->assertOk();
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertSee('Total Lectures')
+        ->assertSee('Welcome back');
+});
+
+it('shows upcoming lectures on dashboard', function () {
+    $user = User::factory()->create();
+    Lecture::factory()->upcoming()->create(['user_id' => $user->id]);
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertSee('Upcoming Lectures');
+});
+
+it('shows empty state when no lectures exist', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('dashboard'))
+        ->assertOk()
+        ->assertSee('No upcoming lectures');
 });

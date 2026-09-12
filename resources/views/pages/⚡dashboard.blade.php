@@ -233,7 +233,19 @@ new class extends Component
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach($upcomingList as $lecture)
                     @php
-                        $status = \App\Models\Lecture::find($lecture['id'])?->status ?? 'upcoming';
+                        $lectureDateTime = \Carbon\Carbon::parse($lecture['lecture_date']);
+                        $startDateTime = \Carbon\Carbon::parse($lecture['start_time']);
+                        $endDateTime = !empty($lecture['end_time']) ? \Carbon\Carbon::parse($lecture['end_time']) : null;
+                        $now = now();
+                        if ($endDateTime && $now->greaterThan($lectureDateTime->copy()->setTime($endDateTime->hour, $endDateTime->minute))) {
+                            $status = 'completed';
+                        } elseif ($lectureDateTime->isToday()) {
+                            $status = $now->greaterThanOrEqualTo($lectureDateTime->copy()->setTime($startDateTime->hour, $startDateTime->minute)) ? 'ongoing' : 'today';
+                        } elseif ($lectureDateTime->isPast()) {
+                            $status = 'completed';
+                        } else {
+                            $status = 'upcoming';
+                        }
                     @endphp
                     <div class="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900">
                         <div class="flex items-center gap-2">

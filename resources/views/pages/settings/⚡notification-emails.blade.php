@@ -78,6 +78,11 @@ new class extends Component
             return;
         }
 
+        if ($emailRecord->created_at->diffInMinutes(now()) > 10) {
+            Flux::toast(heading: 'Code expired.', text: 'Verification code has expired. Please request a new one.', variant: 'warning');
+            return;
+        }
+
         $emailRecord->update([
             'is_verified' => true,
             'verified_at' => now(),
@@ -106,12 +111,8 @@ new class extends Component
 ?>
 
 <div class="flex h-full w-full flex-1 flex-col gap-6 p-4 lg:p-6">
-        <div>
-            <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Notification Emails</h1>
-            <p class="text-sm text-zinc-500 dark:text-zinc-400">Add extra email addresses to receive lecture reminders (max 2)</p>
-        </div>
-
-        <div class="max-w-2xl space-y-6">
+    <x-pages::settings.layout :heading="__('Notification Emails')" :subheading="__('Add extra email addresses to receive lecture reminders (max 2)')">
+        <div class="space-y-6">
             {{-- Current Emails --}}
             <div class="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-700 dark:bg-zinc-900">
                 <h2 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-white">Added Email Addresses</h2>
@@ -188,5 +189,6 @@ new class extends Component
                 </div>
             </div>
         </flux:modal>
-    </div>
+        </div>
+    </x-pages::settings.layout>
 </div>
