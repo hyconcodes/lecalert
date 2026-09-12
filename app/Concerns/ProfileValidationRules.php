@@ -33,6 +33,7 @@ trait ProfileValidationRules
 
     /**
      * Get the validation rules used to validate user emails.
+     * Only allows institution email format: lastname.matricno@bouesti.edu.ng
      *
      * @return array<int, ValidationRule|array<mixed>|string>
      */
@@ -43,6 +44,7 @@ trait ProfileValidationRules
             'string',
             'email',
             'max:255',
+            'regex:/^[a-zA-Z]+\.[0-9]+@bouesti\.edu\.ng$/',
             $userId === null
                 ? Rule::unique(User::class)
                 : Rule::unique(User::class)->ignore($userId),

@@ -12,10 +12,10 @@ test('registration screen can be rendered', function () {
     $response->assertOk();
 });
 
-test('new users can register', function () {
+test('new users can register with valid institution email', function () {
     $response = $this->post(route('register.store'), [
         'name' => 'John Doe',
-        'email' => 'test@example.com',
+        'email' => 'john.2021@bouesti.edu.ng',
         'password' => 'password',
         'password_confirmation' => 'password',
     ]);
@@ -24,4 +24,15 @@ test('new users can register', function () {
         ->assertRedirect(route('dashboard', absolute: false));
 
     $this->assertAuthenticated();
+});
+
+test('registration fails with invalid email format', function () {
+    $response = $this->post(route('register.store'), [
+        'name' => 'John Doe',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $response->assertSessionHasErrors('email');
 });
