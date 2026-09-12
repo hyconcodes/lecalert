@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use Flux\Flux;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
@@ -44,7 +45,7 @@ new class extends Component
             'email' => $this->email,
         ]);
 
-        session()->flash('success', 'Profile updated successfully.');
+        Flux::toast(heading: 'Profile updated.', variant: 'success');
     }
 
     public function changePassword(): void
@@ -61,7 +62,7 @@ new class extends Component
         ])->validate();
 
         if (! Hash::check($this->currentPassword, $user->password)) {
-            session()->flash('error', 'Current password is incorrect.');
+            Flux::toast(heading: 'Error.', text: 'Current password is incorrect.', variant: 'danger');
             return;
         }
 
@@ -73,7 +74,7 @@ new class extends Component
         $this->newPassword = '';
         $this->newPasswordConfirmation = '';
 
-        session()->flash('success', 'Password changed successfully.');
+        Flux::toast(heading: 'Password changed.', variant: 'success');
     }
 
 };
@@ -84,18 +85,6 @@ new class extends Component
             <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Profile</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Manage your account information</p>
         </div>
-
-        @if(session('success'))
-            <div class="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <div class="max-w-2xl space-y-6">
             {{-- Profile Information --}}
@@ -116,22 +105,15 @@ new class extends Component
                 <form wire:submit="updateProfile" class="space-y-4">
                     <flux:field>
                         <flux:label>Full Name</flux:label>
-                        <flux:input wire:model="name" />
+                        <flux:input wire:model="name" disabled />
                         <flux:error name="name" />
                     </flux:field>
 
                     <flux:field>
                         <flux:label>Email Address</flux:label>
-                        <flux:input wire:model="email" type="email" placeholder="lastname.matricno@bouesti.edu.ng" />
+                        <flux:input wire:model="email" type="email" disabled />
                         <flux:error name="email" />
-                        <flux:text class="text-xs">Only institution emails (lastname.matricno@bouesti.edu.ng) are allowed.</flux:text>
                     </flux:field>
-
-                    <div class="flex justify-end">
-                        <flux:button variant="primary" type="submit" icon="check">
-                            Save Changes
-                        </flux:button>
-                    </div>
                 </form>
             </div>
 

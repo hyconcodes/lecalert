@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Lecture;
+use Flux\Flux;
 use Livewire\Component;
 
 new class extends Component
@@ -72,7 +73,7 @@ new class extends Component
                 'reminder_minutes' => $this->reminderMinutes,
             ]);
 
-        session()->flash('success', 'Lecture updated successfully!');
+        Flux::toast(heading: 'Lecture updated.', variant: 'success');
         $this->redirectRoute('lectures.index');
     }
 

@@ -70,7 +70,7 @@ new class extends Component
         <div class="flex gap-2">
             @foreach(['all' => 'All', 'unread' => 'Unread', 'reminders' => 'Reminders', 'system' => 'System'] as $value => $label)
                 <button
-                    wire:click="set filter('{{ $value }}')"
+                    wire:click="$set('filter', '{{ $value }}')"
                     class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors {{ $filter === $value ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700' }}"
                 >
                     {{ $label }}
@@ -85,7 +85,11 @@ new class extends Component
                     <div class="rounded-xl border border-zinc-200 bg-white p-4 transition-all hover:shadow-sm dark:border-zinc-700 dark:bg-zinc-900 {{ $notification['is_read'] ? '' : 'border-l-4 border-l-indigo-500' }}">
                         <div class="flex items-start gap-4">
                             <div class="flex size-10 shrink-0 items-center justify-center rounded-full {{ $notification['type'] === 'reminder' ? 'bg-indigo-100 dark:bg-indigo-500/20' : 'bg-zinc-100 dark:bg-zinc-800' }}">
-                                <flux:icon.{{ $notification['type'] === 'reminder' ? 'bell' : 'information-circle' }} class="size-5 {{ $notification['type'] === 'reminder' ? 'text-indigo-600 dark:text-indigo-400' : 'text-zinc-500 dark:text-zinc-400' }}" />
+                                @if($notification['type'] === 'reminder')
+                                    <flux:icon.bell class="size-5 text-indigo-600 dark:text-indigo-400" />
+                                @else
+                                    <flux:icon.information-circle class="size-5 text-zinc-500 dark:text-zinc-400" />
+                                @endif
                             </div>
 
                             <div class="flex-1 min-w-0">

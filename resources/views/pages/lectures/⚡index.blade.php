@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Lecture;
+use Flux\Flux;
 use Livewire\Component;
 
 new class extends Component
@@ -28,8 +29,7 @@ new class extends Component
 
     public function loadLectures(): void
     {
-        $query = Lecture::where('user_id', auth()->id())
-            ->with('lecture');
+        $query = Lecture::where('user_id', auth()->id());
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -82,7 +82,7 @@ new class extends Component
             $this->showDeleteModal = false;
             $this->deleteLectureId = null;
             $this->loadLectures();
-            session()->flash('success', 'Lecture deleted successfully.');
+            Flux::toast(heading: 'Deleted.', text: 'Lecture deleted successfully.', variant: 'success');
         }
     }
 
@@ -118,12 +118,6 @@ new class extends Component
 
 <div class="flex h-full w-full flex-1 flex-col gap-6 p-4 lg:p-6">
 
-        @if(session('success'))
-            <div class="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
-
         {{-- Header --}}
         <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -147,7 +141,7 @@ new class extends Component
             <div class="flex gap-2">
                 @foreach(['all' => 'All', 'today' => 'Today', 'upcoming' => 'Upcoming', 'completed' => 'Completed'] as $value => $label)
                     <button
-                        wire:click="set filterStatus('{{ $value }}')"
+                        wire:click="$set('filterStatus', '{{ $value }}')"
                         class="inline-flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors {{ $filterStatus === $value ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-400' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700' }}"
                     >
                         {{ $label }}

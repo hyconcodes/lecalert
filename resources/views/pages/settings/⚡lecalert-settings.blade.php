@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\UserSetting;
+use Flux\Flux;
 use Livewire\Component;
 
 new class extends Component
@@ -36,7 +37,7 @@ new class extends Component
             ],
         );
 
-        session()->flash('success', 'Settings saved successfully.');
+        Flux::toast(heading: 'Settings saved.', variant: 'success');
     }
 
 };
@@ -47,12 +48,6 @@ new class extends Component
             <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Settings</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Configure your reminder preferences and notification settings</p>
         </div>
-
-        @if(session('success'))
-            <div class="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
 
         <form wire:submit="save" class="max-w-2xl space-y-6">
             {{-- Reminder Settings --}}

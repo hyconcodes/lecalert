@@ -2,6 +2,7 @@
 
 use App\Mail\OtpVerificationMail;
 use App\Models\NotificationEmail;
+use Flux\Flux;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -32,7 +33,7 @@ new class extends Component
     public function addEmail(): void
     {
         if (count($this->emails) >= 2) {
-            session()->flash('error', 'You can only add up to 2 notification email addresses.');
+            Flux::toast(heading: 'Limit reached.', text: 'You can only add up to 2 notification email addresses.', variant: 'warning');
             return;
         }
 
@@ -43,7 +44,7 @@ new class extends Component
             ->exists();
 
         if ($existing) {
-            session()->flash('error', 'This email address is already added.');
+            Flux::toast(heading: 'Duplicate.', text: 'This email address is already added.', variant: 'warning');
             return;
         }
 
@@ -62,7 +63,7 @@ new class extends Component
         $this->showAddForm = false;
         $this->newEmail = '';
 
-        session()->flash('success', 'Verification code sent to your email.');
+        Flux::toast(heading: 'Code sent.', text: 'Verification code sent to your email.', variant: 'success');
     }
 
     public function verifyEmail(): void
@@ -73,7 +74,7 @@ new class extends Component
             ->first();
 
         if (! $emailRecord) {
-            session()->flash('error', 'Invalid verification code.');
+            Flux::toast(heading: 'Invalid code.', text: 'Invalid verification code.', variant: 'danger');
             return;
         }
 
@@ -88,7 +89,7 @@ new class extends Component
         $this->verifyingEmailId = null;
 
         $this->loadEmails();
-        session()->flash('success', 'Email verified successfully!');
+        Flux::toast(heading: 'Verified!', text: 'Email verified successfully!', variant: 'success');
     }
 
     public function removeEmail(int $emailId): void
@@ -98,7 +99,7 @@ new class extends Component
             ->delete();
 
         $this->loadEmails();
-        session()->flash('success', 'Email removed successfully.');
+        Flux::toast(heading: 'Removed.', text: 'Email removed successfully.', variant: 'success');
     }
 
 };
@@ -109,18 +110,6 @@ new class extends Component
             <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Notification Emails</h1>
             <p class="text-sm text-zinc-500 dark:text-zinc-400">Add extra email addresses to receive lecture reminders (max 2)</p>
         </div>
-
-        @if(session('success'))
-            <div class="rounded-lg bg-emerald-50 p-4 text-sm text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-500/10 dark:text-red-400">
-                {{ session('error') }}
-            </div>
-        @endif
 
         <div class="max-w-2xl space-y-6">
             {{-- Current Emails --}}
