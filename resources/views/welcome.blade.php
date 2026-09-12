@@ -246,7 +246,7 @@
                     <span class="text-lg font-bold text-zinc-900">LecAlert</span>
                 </div>
                 <div class="text-sm text-zinc-500">
-                    &copy; {{ date('Y') }} Built by <strong class="text-zinc-700">Hycon</strong>. WhatsApp: <a href="https://wa.me/23447177291" class="text-indigo-600 hover:underline">+23447177291</a>
+                    &copy; {{ date('Y') }} Built by <strong class="text-zinc-700">Hycon</strong> - <a href="https://wa.me/2348147177291" class="text-indigo-600 hover:underline">WhatsApp</a>
                 </div>
                 <div class="flex gap-4 text-sm">
                     @if (Route::has('login'))
