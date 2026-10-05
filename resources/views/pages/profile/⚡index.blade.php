@@ -45,7 +45,7 @@ new class extends Component
             'email' => $this->email,
         ]);
 
-        Flux::toast(heading: 'Profile updated.', variant: 'success');
+        Flux::toast(heading: 'Profile updated.', text: 'Your profile has been updated successfully.', variant: 'success');
     }
 
     public function changePassword(): void
@@ -74,7 +74,7 @@ new class extends Component
         $this->newPassword = '';
         $this->newPasswordConfirmation = '';
 
-        Flux::toast(heading: 'Password changed.', variant: 'success');
+        Flux::toast(heading: 'Password changed.', text: 'Your password has been changed successfully.', variant: 'success');
     }
 
 };

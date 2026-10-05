@@ -73,7 +73,7 @@ new class extends Component
                 'reminder_minutes' => $this->reminderMinutes,
             ]);
 
-        Flux::toast(heading: 'Lecture updated.', variant: 'success');
+        Flux::toast(heading: 'Lecture updated.', text: 'Your lecture has been updated successfully.', variant: 'success');
         $this->redirectRoute('lectures.index');
     }
 

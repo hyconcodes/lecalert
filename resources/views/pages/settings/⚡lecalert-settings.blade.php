@@ -37,7 +37,7 @@ new class extends Component
             ],
         );
 
-        Flux::toast(heading: 'Settings saved.', variant: 'success');
+        Flux::toast(heading: 'Settings saved.', text: 'Your reminder settings have been saved.', variant: 'success');
     }
 
 };
